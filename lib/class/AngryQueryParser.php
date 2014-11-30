@@ -9,7 +9,7 @@
 /**
  * AngryQueryParser is parser for easy needs
  * 
- * Version: 0.1.0
+ * Version: 0.1.1
  * 
  * @author Vitaliy
  */
@@ -77,10 +77,6 @@ class AngryQueryParser {
      */
     public function getPage($url,  array $args, $meta = false){
         if (empty($url)) return false;
-        if( $this->angryMode ){
-            $AC2->load_proxy_list($this->proxy_list , 200 );
-            $AC2->load_useragent_list( $this->user_agent_list );
-        }
         $method = ( !empty($this->request_method) ) ? $this->request_method : "GET";
         $post_data = ( !empty($this->request_post_data) ) ? $this->request_post_data : NULL;
         $headers = ( !empty($this->request_headers) ) ? $this->request_headers : NULL;
@@ -110,6 +106,10 @@ class AngryQueryParser {
         $callback = array('AngryQueryParser', 'callback_getPage');
         $obj = 'AC_'.time();
         $$obj = new AngryCurl($callback);
+        if( $this->angryMode ){
+            $$obj->load_proxy_list($this->proxy_list , 200 );
+            $$obj->load_useragent_list( $this->user_agent_list );
+        }
         $request = new AngryCurlRequest($url, $method, $post_data, $headers, $options);
         $$obj->add($request);
         $$obj->execute(200);

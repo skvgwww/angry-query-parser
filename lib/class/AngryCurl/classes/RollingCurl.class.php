@@ -231,9 +231,15 @@ class RollingCurl {
         $request = array_shift($this->requests);
         $options = $this->get_options($request);
         curl_setopt_array($ch, $options);
-        $output = curl_exec($ch);
+        try{
+            if( !$output = curl_exec($ch) ) throw new Exception;
+        }  catch (Exception $e){
+             foreach ( $options as $CURL_OPT_ID => $value ){
+                 curl_setopt($ch, $CURL_OPT_ID, $value);
+             }
+             $output = curl_exec($ch);
+        }
         $info = curl_getinfo($ch);
-
         // it's not neccesary to set a callback for one-off requests
         if ($this->callback) {
             $callback = $this->callback;
