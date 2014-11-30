@@ -287,7 +287,7 @@ class AngryQueryParser {
                     if( preg_match('/^(http:\/\/)/', $file[$attr]) )
                     {
                         $url = parse_url($file[$attr]);
-                        if( in_array( $url['host'] == $host) ){
+                        if( $url['host'] == $host ){
                             if( $file[$attr] != $hostname ){
                                 $new_path = ( !empty($fn_arr[0]) )? '/'.$fn_arr[0] : '/';
                                
